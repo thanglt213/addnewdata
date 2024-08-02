@@ -6,8 +6,9 @@ st.write(
     "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
 )
 
-# Khởi tạo dataframe rỗng
-data = pd.DataFrame(columns=['length', 'deepth', 'sex'])
+# Khởi tạo hoặc lấy lại data từ session state
+if 'data' not in st.session_state:
+    st.session_state.data = pd.DataFrame(columns=['length', 'deepth', 'sex'])
 
 # Tạo các công cụ nhập liệu
 st.title("Data Entry Form")
@@ -19,11 +20,11 @@ sex = st.selectbox("Select sex", ["male", "female"])
 # Nút để thêm dữ liệu vào dataframe
 if st.button("Add Data"):
     new_row = pd.DataFrame({'length': [length], 'deepth': [deepth], 'sex': [sex]})
-    data = pd.concat([data, new_row], ignore_index=True)
+    st.session_state.data = pd.concat([st.session_state.data, new_row], ignore_index=True)
     st.success("Data added successfully!")
-    st.write(data)
 
 # Hiển thị dataframe
 st.write("Current Data:")
-st.dataframe(data)
+st.dataframe(st.session_state.data)
+
 

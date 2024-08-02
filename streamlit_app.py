@@ -1,30 +1,48 @@
 import streamlit as st
 import pandas as pd
+import os
 
 st.title("🎈 My new app")
 st.write(
     "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
 )
 
-# Khởi tạo hoặc lấy lại data từ session state
-if 'data' not in st.session_state:
-    st.session_state.data = pd.DataFrame(columns=['height', 'weight', 'sex'])
+# Đường dẫn tệp CSV
+DATA_FILE = 'data.csv'
 
-# Tạo các công cụ nhập liệu
-st.title("Data Entry Form")
+# Hàm khởi tạo dataframe hoặc tải dữ liệu từ tệp
+def load_data():
+    if os.path.exists(DATA_FILE):
+        return pd.read_csv(DATA_FILE)
+    else:
+        return pd.DataFrame(columns=['Height', 'Weight', 'Sex'])
 
-height = st.slider("Select height", min_value=110, max_value=200, value=1)
-weight = st.slider("Select weight", min_value=10, max_value=120, value=1)
-sex = st.selectbox("Select sex", ["male", "female"])
+# Hàm lưu dữ liệu vào tệp
+def save_data(data):
+    data.to_csv(DATA_FILE, index=False)
 
-# Nút để thêm dữ liệu vào dataframe
-if st.button("Add Data"):
-    new_row = pd.DataFrame({'height': [height], 'weight': [weight], 'sex': [sex]})
-    st.session_state.data = pd.concat([st.session_state.data, new_row], ignore_index=True)
-    st.success("Data added successfully!")
+# Hàm thêm dữ liệu vào dataframe
+def add_data(height, weight, sex):
+    global data
+    new_data = pd.DataFrame({'Height': [height], 'Weight': [weight], 'Sex': [sex]})
+    data = pd.concat([data, new_data], ignore_index=True)
+    save_data(data)
 
-# Hiển thị dataframe
-st.write("Current Data:")
-st.dataframe(st.session_state.data)
+# Tải dữ liệu từ tệp hoặc khởi tạo dataframe mới
+data = load_data()
 
+# Widget nhập liệu
+st.title("Nhập liệu nhân khẩu học")
 
+height = st.slider("Chiều cao (cm)", min_value=110, max_value=200)
+weight = st.slider("Cân nặng (kg)", min_value=20, max_value=120)
+sex = st.selectbox("Giới tính", options=["Male", "Female"])
+
+# Nút thêm dữ liệu
+if st.button("Thêm dữ liệu"):
+    add_data(height, weight, sex)
+    st.success("Dữ liệu đã được thêm!")
+
+# Hiển thị dữ liệu hiện tại
+st.write("Dữ liệu hiện tại:")
+st.write(data)

@@ -13,8 +13,8 @@ if 'data' not in st.session_state:
 # Tạo các công cụ nhập liệu
 st.title("Data Entry Form")
 
-height = st.slider("Select height", min_value=10, max_value=120, value=1)
-weight = st.slider("Select weight", min_value=110, max_value=200, value=1)
+height = st.slider("Select height", min_value=110, max_value=200, value=1)
+weight = st.slider("Select weight", min_value=10, max_value=120, value=1)
 sex = st.selectbox("Select sex", ["male", "female"])
 
 # Nút để thêm dữ liệu vào dataframe

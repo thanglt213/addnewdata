@@ -10,6 +10,13 @@ st.write(
 # Đường dẫn tệp CSV
 DATA_FILE = 'data.csv'
 
+# Bản đồ tên cột tiếng Việt
+COLUMN_NAMES_VIETNAMESE = {
+    'Height': 'Chiều cao',
+    'Weight': 'Cân nặng',
+    'Sex': 'Giới tính'
+}
+
 # Hàm khởi tạo dataframe hoặc tải dữ liệu từ tệp
 def load_data():
     if os.path.exists(DATA_FILE):
@@ -43,6 +50,7 @@ if st.button("Thêm dữ liệu"):
     add_data(height, weight, sex)
     st.success("Dữ liệu đã được thêm!")
 
-# Hiển thị dữ liệu hiện tại
+# Hiển thị dữ liệu hiện tại với tên cột tiếng Việt
 st.write("Dữ liệu hiện tại:")
-st.write(data)
+data_vietnamese = data.rename(columns=COLUMN_NAMES_VIETNAMESE)
+st.write(data_vietnamese)
